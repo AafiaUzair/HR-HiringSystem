@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HR Hiring System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f5;--panel:#fff;--ink:#14213d;--mute:#5b6679;--line:#d8dee8;--acc:#0f766e;--accbg:#d9f1ee;--good:#15803d;--goodbg:#dcf3e3;--bad:#b91c1c;--badbg:#fbe0e0;--warn:#9a5b00;--warnbg:#fdecc8;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1621;--panel:#172230;--ink:#e7edf5;--mute:#9aa8bb;--line:#2a3a4e;--acc:#5eead4;--accbg:#12383a;--good:#6ee7a0;--goodbg:#143a25;--bad:#fca5a5;--badbg:#431a1a;--warn:#fcd34d;--warnbg:#41330d;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1621;--panel:#172230;--ink:#e7edf5;--mute:#9aa8bb;--line:#2a3a4e;--acc:#5eead4;--accbg:#12383a;--good:#6ee7a0;--goodbg:#143a25;--bad:#fca5a5;--badbg:#431a1a;--warn:#fcd34d;--warnbg:#41330d;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "Public Sans",system-ui,sans-serif}
+header{padding:20px 20px 0;max-width:1240px;margin:0 auto}
+h1{font-size:24px;margin:0;font-weight:700}h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0}
+.sub{color:var(--mute);margin:2px 0 14px;max-width:70ch}
+nav{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mute);font:600 15px "Public Sans",sans-serif;padding:10px 14px;cursor:pointer}
+nav button[aria-current="page"]{color:var(--ink);border-color:var(--acc)}
+nav .sp{flex:1}nav .rs{font-weight:500;font-size:13px}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+main{max-width:1240px;margin:0 auto;padding:18px 20px 40px}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(210px,1fr);gap:12px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;min-height:160px}
+.col h3{display:flex;justify-content:space-between;margin-bottom:8px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:8px}
+.card b{display:block}.m{color:var(--mute);font-size:13px}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.btn{font:600 13px "Public Sans",sans-serif;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:5px 10px;cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.p{color:#06201d}}
+.btn:disabled{opacity:.45;cursor:default}
+input,select{font:14px "Public Sans",sans-serif;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:var(--panel);color:var(--ink);max-width:100%}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.form label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:3px}
+.chip{display:inline-block;font:600 12px "Public Sans",sans-serif;padding:2px 8px;border-radius:99px;background:var(--accbg);color:var(--acc)}
+.chip.g{background:var(--goodbg);color:var(--good)}.chip.b{background:var(--badbg);color:var(--bad)}.chip.w{background:var(--warnbg);color:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{color:var(--mute);font-weight:600;font-size:13px}
+.wrap{overflow-x:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.kpi .v{font-size:30px;font-weight:700;line-height:1.2}.kpi .t{color:var(--mute);font-size:13px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--acc)}
+.cols2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:16px}@media(max-width:900px){.cols2{grid-template-columns:1fr}}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-weight:600;display:none;max-width:90vw;z-index:5}
+.hb{display:flex;align-items:flex-end;gap:6px;height:130px;border-bottom:1px solid var(--line);position:relative;margin-top:8px}
+.hb div{flex:1;background:var(--acc);border-radius:3px 3px 0 0;position:relative}.hb div.r{background:var(--bad)}
+.hb span{position:absolute;top:-17px;left:0;right:0;text-align:center;font-size:11px;color:var(--mute)}
+.tl{position:absolute;left:0;right:0;border-top:2px dashed var(--warn)}
+</style>
+</head>
+<body>
+<header>
+<h1>HR Hiring System</h1>
+<p class="sub">A working model of the hiring and onboarding workflow: move candidates through nine stages, score interviews, track new hires and watch the KPIs update. All people and figures are simulated.</p>
+<nav id="nav"></nav>
+</header>
+<main id="main"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+const W=[["Role skills",.3],["Problem solving",.2],["Communication",.2],["Values alignment",.15],["Learning ability",.15]];
+const ST=["Applied","Screening","Interview","Decision","Offer","Hired"];
+const ROLES=["Customer Support Agent","Marketing Executive","Sales Associate"];
+const SRC=["LinkedIn","Job board","Referral","Email","Walk-in"];
+const REJ=["Below cut-off score","Failed interview","Withdrew","Position filled"];
+const IV=["Sara Malik","Usman Tariq","Bilal Ahmed","Ayesha Khan"];
+const HIRES=[[52,1],[38,1],[47,0],[41,1],[55,1],[36,0],[49,1],[43,1],[33,0],[56,1]];
+const CUT=60,SLA=24,GAP=1.5;
+const TABS=[["pipeline","Pipeline"],["scorecards","Scorecards"],["onboarding","Onboarding"],["kpis","KPIs"]];
+function seed(){
+ const c=(n,s,role,src,stage,sc,rej)=>({id:"c"+n,name:s,email:s.toLowerCase().replace(" ",".")+"@example.com",role:ROLES[role],src,stage,score:sc,rej:rej||""});
+ const cands=[c(1,"Hamza Raza",0,"LinkedIn","Interview",78),c(2,"Zainab Ali",0,"Job board","Screening",66),c(3,"Omar Farooq",0,"Referral","Rejected",48,"Below cut-off score"),c(4,"Hina Shah",0,"Email","Screening",71),c(5,"Daniyal Sheikh",0,"Job board","Applied",null),c(6,"Noor Fatima",0,"LinkedIn","Applied",null),c(7,"Saad Mirza",1,"LinkedIn","Interview",82),c(8,"Rabia Anwar",2,"Referral","Offer",90),c(9,"Iqra Javed",1,"Job board","Hired",85),c(10,"Kamran Bhatti",2,"Email","Decision",74)];
+ const sc=[["c7",0,4,[4,4,5,4,4],1],["c7",1,18,[4,4,4,5,4],1],["c9",2,22,[5,4,4,4,5],1],["c9",3,6,[4,5,4,4,4],1],["c1",0,29,[3,3,4,4,3],0],["c1",1,20,[4,3,3,4,4],1],["c10",2,12,[4,4,4,3,4],1],["c10",3,31,[3,3,3,4,3],1],["c8",0,15,[5,5,4,5,4],1],["c8",1,23,[4,5,5,4,5],1]].map((x,i)=>({id:"s"+i,cid:x[0],who:IV[x[1]],hrs:x[2],r:x[3],ev:x[4]}));
+ const hires=[["Mahnoor Tariq",ROLES[0],5],["Faizan Ahmed",ROLES[1],4],["Sana Iqbal",ROLES[2],5]].map((x,i)=>({id:"h"+(i+1),name:x[0],role:x[1],day:10,chk:[1,1,1,1],mods:x[2]}));
+ return{cands,sc,hires,n:100,rejecting:null};
+}
+function load(){try{const j=localStorage.getItem("hd-v2");if(j)return JSON.parse(j)}catch(e){}return seed()}
+let S=load(),view=(location.hash||"#pipeline").slice(1);if(!TABS.some(t=>t[0]==view))view="pipeline";
+const save=()=>{try{localStorage.setItem("hd-v2",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(tt);tt=setTimeout(()=>t.style.display="none",3200)}
+const ws=r=>r.reduce((a,v,i)=>a+v*W[i][1],0),guide=s=>s>=4?"Strong hire":s>=3?"Discuss at debrief":"Do not proceed";
+const med=a=>{a=[...a].sort((x,y)=>x-y);const n=a.length;return n?(n%2?a[(n-1)/2]:(a[n/2-1]+a[n/2])/2):0};
+const code=(p,id)=>p+"-"+String(id).replace(/\D/g,"").padStart(3,"0");
+const lab=id=>{const c=S.cands.find(x=>x.id==id);return c?c.name+" ("+code("CAN",c.id)+")":"Unknown"};
+const opts=(a,v)=>a.map(x=>`<option${x==v?" selected":""}>${esc(x)}</option>`).join("");
+function gaps(){const g={};S.sc.forEach(s=>{(g[s.cid]=g[s.cid]||[]).push(ws(s.r))});const o={};for(const k in g)o[k]=Math.max(...g[k])-Math.min(...g[k]);return o}
+
+function vPipeline(){
+ const cols=ST.map(st=>{const L=S.cands.filter(c=>c.stage==st);
+  return `<section class="col" aria-label="${st}"><h3>${st}<span class="chip">${L.length}</span></h3>${L.map(c=>{const i=ST.indexOf(c.stage);
+  const sh=c.score!=null&&c.score>=CUT;
+  return `<div class="card"><b>${esc(c.name)}</b><span class="m">${code("CAN",c.id)} · ${esc(c.role)} · ${esc(c.src)}</span>
+  ${c.stage=="Screening"?`<div class="row"><label class="m">Screen score <input type="number" min="0" max="100" value="${c.score??""}" data-chg="score" data-id="${c.id}" style="width:70px"></label>${c.score!=null?`<span class="chip ${sh?"g":"b"}">${sh?"Shortlist":"Below cut-off"}</span>`:""}</div>`:c.score!=null?`<div class="row"><span class="chip ${sh?"g":"b"}">Score ${c.score}</span></div>`:""}
+  ${S.rejecting==c.id?`<div class="row"><select id="rj" aria-label="Rejection reason">${opts(REJ)}</select><button class="btn p" data-act="rejok" data-id="${c.id}">Confirm</button></div>`:`<div class="row">
+  <button class="btn" data-act="back" data-id="${c.id}"${i==0?" disabled":""}>Back</button>
+  <button class="btn p" data-act="next" data-id="${c.id}"${i==ST.length-1?" disabled":""}>${ST[i+1]?"To "+ST[i+1]:"Done"}</button>
+  <button class="btn" data-act="rej" data-id="${c.id}">Reject</button></div>`}</div>`}).join("")||`<p class="m">No candidates</p>`}</section>`}).join("");
+ const R=S.cands.filter(c=>c.stage=="Rejected");
+ return `<div class="panel"><h2>Add applicant</h2><div class="form" id="addf">
+ <label>Name<input id="an" placeholder="Full name"></label><label>Email<input id="ae" type="email" placeholder="name@example.com"></label>
+ <label>Role<select id="ar">${opts(ROLES)}</select></label><label>Source (required)<select id="as"><option value="">Select source</option>${opts(SRC)}</select></label>
+ <button class="btn p" data-act="add">Add applicant</button></div>
+ <p class="m" style="margin:8px 0 0">Duplicate emails are blocked, a score of ${CUT} or more is needed to shortlist, and moving someone to Hired creates their onboarding checklist.</p></div>
+ <div class="board">${cols}</div>
+ <div class="panel" style="margin-top:16px"><h2>Rejected (${R.length})</h2>${R.length?`<div class="wrap"><table><tr><th>ID</th><th>Candidate</th><th>Role</th><th>Reason</th><th></th></tr>${R.map(c=>`<tr><td>${code("CAN",c.id)}</td><td>${esc(c.name)}</td><td>${esc(c.role)}</td><td>${esc(c.rej)}</td><td><button class="btn" data-act="restore" data-id="${c.id}">Reopen</button></td></tr>`).join("")}</table></div>`:`<p class="m">Every rejection needs a recorded reason.</p>`}</div>`}
+
+function vScore(){
+ const elig=S.cands.filter(c=>["Interview","Decision","Offer"].includes(c.stage)),g=gaps();
+ return `<div class="cols2"><div class="panel"><h2>New scorecard</h2><div class="form" style="flex-direction:column;align-items:stretch" id="sf">
+ <label>Candidate<select id="sc">${elig.map(c=>`<option value="${c.id}">${code("CAN",c.id)} ${esc(c.name)} (${esc(c.role)})</option>`).join("")||"<option value=''>No candidates in interview</option>"}</select></label>
+ <label>Interviewer<select id="si">${opts(IV)}</select></label>
+ <label>Hours since the interview ended<input id="sh" type="number" min="0" value="6"></label>
+ ${W.map((w,i)=>`<label>${w[0]} (${w[1]*100}%)<select class="rt" aria-label="${w[0]}">${[1,2,3,4,5].map(n=>`<option${n==3?" selected":""}>${n}</option>`).join("")}</select></label>`).join("")}
+ <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="se" checked>Evidence written for every criterion</label>
+ <p style="margin:0"><b id="lv">3.00</b> <span id="lg" class="chip w">Discuss at debrief</span></p>
+ <button class="btn p" data-act="savesc"${elig.length?"":" disabled"}>Save scorecard</button></div></div>
+ <div class="panel"><h2>Submitted scorecards (${S.sc.length})</h2><div class="wrap"><table><tr><th>Candidate</th><th>Interviewer</th><th>Score</th><th>Guide</th><th>Feedback</th><th>Gap</th></tr>
+ ${S.sc.map(s=>{const v=ws(s.r),late=s.hrs>SLA,gp=g[s.cid]>GAP;return `<tr><td>${esc(lab(s.cid))}</td><td>${esc(s.who)}</td><td>${v.toFixed(2)}</td><td>${guide(v)}</td><td><span class="chip ${late?"b":"g"}">${s.hrs}h ${late?"late":"on time"}</span>${s.ev?"":` <span class="chip w">No evidence</span>`}</td><td>${gp?`<span class="chip b">Debrief gap</span>`:"OK"}</td></tr>`}).join("")}</table></div>
+ <p class="m">Scorecards are due within ${SLA} hours. A gap above ${GAP} points between interviewers triggers a debrief.</p></div></div>`}
+
+function vOnb(){
+ const L=["Checklist created","IT access ready","LMS enrolled","Day 1 welcome done"];
+ if(!S.hires.length)return `<div class="panel"><h2>Onboarding</h2><p class="m">No new hires yet. Move a candidate to Hired on the Pipeline and the checklist appears here.</p></div>`;
+ return `<div class="grid">${S.hires.map(h=>{const pc=h.mods/5,rem=h.day>=10&&h.mods<5;
+ return `<div class="panel" style="margin:0"><h3>${esc(h.name)}</h3><span class="m">${code("EMP",h.id)} · ${esc(h.role)}</span>
+ <div class="row">${L.map((l,i)=>`<label class="m" style="display:flex;gap:6px;align-items:center;width:100%"><input type="checkbox" data-chg="chk" data-id="${h.id}" data-i="${i}"${h.chk[i]?" checked":""}>${l}</label>`).join("")}</div>
+ <div class="row"><label class="m">Day <input type="number" min="0" max="90" value="${h.day}" data-chg="day" data-id="${h.id}" style="width:64px"></label>
+ <button class="btn" data-act="mm" data-id="${h.id}">Module -</button><button class="btn p" data-act="mp" data-id="${h.id}">Module +</button></div>
+ <p style="margin:10px 0 0">LMS modules ${h.mods} of 5 (${Math.round(pc*100)}%)</p><div class="bar"><i style="width:${pc*100}%"></i></div>
+ <div class="row">${rem?`<span class="chip b">Send Day 10 reminder</span>`:`<span class="chip g">On track</span>`}<span class="chip ${h.mods>=5?"g":h.day>=14?"b":"w"}">${h.mods>=5?"Training complete":h.day>=14?"Overdue":"Due by Day 14"}</span></div></div>`}).join("")}</div>`}
+
+function vKpi(){
+ const dh=HIRES.map(x=>x[0]),avg=dh.reduce((a,b)=>a+b,0)/dh.length,ret=HIRES.filter(x=>x[1]).length/HIRES.length;
+ const hrs=S.sc.map(s=>s.hrs),on=S.sc.filter(s=>s.hrs<=SLA).length/(S.sc.length||1),lms=S.hires.length?S.hires.reduce((a,h)=>a+h.mods/5,0)/S.hires.length:0;
+ const dup=S.cands.length,max=60;
+ const k=(t,v,s,ok)=>`<div class="kpi"><div class="t">${t}</div><div class="v">${v}</div><span class="chip ${ok===true?"g":ok===false?"b":"w"}">${s}</span></div>`;
+ return `<div class="grid">
+ ${k("Time-to-hire, baseline sample",avg.toFixed(1)+" days","Target 25; Week 2 dry run 23",false)}
+ ${k("90-day retention, baseline",Math.round(ret*100)+"%","Target 90%; first cohort pending",null)}
+ ${k("Feedback turnaround, median",med(hrs)+" hours","Target 24 hours",med(hrs)<=SLA)}
+ ${k("Scorecards within 24 hours",Math.round(on*100)+"%","Target 90%",on>=.9)}
+ ${k("Onboarding LMS completion",Math.round(lms*100)+"%","Target 100% by Day 14",lms>=1?true:lms>=.9?null:false)}
+ ${k("Pilot metrics at target","10 of 12 (83.3%)","Goal 80%",true)}
+ ${k("SLA checkpoints on time","58 of 64 (90.6%)","Team goal 90%",true)}
+ ${k("Candidate satisfaction","85%","Target 85%",true)}</div>
+ <div class="cols2" style="margin-top:16px"><div class="panel"><h2>Pipeline now</h2>${[...ST,"Rejected"].map(s=>{const n=S.cands.filter(c=>c.stage==s).length;return `<div style="display:flex;justify-content:space-between"><span>${s}</span><b>${n}</b></div><div class="bar"><i style="width:${n/Math.max(1,S.cands.length)*100}%"></i></div>`}).join("")}</div>
+ <div class="panel"><h2>Days-to-hire, 10 past hires</h2><p class="m" style="margin:0">Bars above the dashed line missed the 25-day target. Average ${avg.toFixed(1)} days.</p>
+ <div class="hb">${dh.map((d,i)=>`<div class="r" style="height:${d/max*100}%"><span>${d}</span></div>`).join("")}<div class="tl" style="bottom:${25/max*100}%;background:none;border-radius:0;flex:none;height:0"></div></div>
+ <p class="m" style="margin:6px 0 0">Source: simulated audit sample, requisitions Jan to May 2025.</p></div></div>`}
+
+function render(){
+ $("#nav").innerHTML=TABS.map(t=>`<button data-tab="${t[0]}"${t[0]==view?` aria-current="page"`:""}>${t[1]}</button>`).join("")+`<span class="sp"></span><button class="rs" data-act="reset">Reset demo data</button>`;
+ $("#main").innerHTML=({pipeline:vPipeline,scorecards:vScore,onboarding:vOnb,kpis:vKpi})[view]();
+ if(view=="scorecards")calc();
+}
+function calc(){const r=[...document.querySelectorAll(".rt")].map(e=>+e.value);if(!r.length)return;const v=ws(r);$("#lv").textContent=v.toFixed(2);$("#lg").textContent=guide(v)}
+document.addEventListener("click",e=>{
+ const tb=e.target.closest("[data-tab]");if(tb){view=tb.dataset.tab;history.replaceState(null,"","#"+view);render();return}
+ const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act,id=b.dataset.id,c=S.cands.find(x=>x.id==id);
+ if(a=="reset"){S=seed();save();render();toast("Demo data restored");return}
+ if(a=="add"){const n=$("#an").value.trim(),m=$("#ae").value.trim().toLowerCase(),s=$("#as").value;
+  if(!n||!m||!/^\S+@\S+\.\S+$/.test(m))return toast("Enter a name and a valid email");
+  if(!s)return toast("Choose the source of this application");
+  if(S.cands.some(x=>x.email==m))return toast("Duplicate: this email is already in the pipeline");
+  S.cands.push({id:"c"+(S.n++),name:n,email:m,role:$("#ar").value,src:s,stage:"Applied",score:null,rej:""});save();render();toast("Added and acknowledged");return}
+ if(a=="next"||a=="back"){const i=ST.indexOf(c.stage);
+  if(a=="next"){if(c.stage=="Screening"&&!(c.score>=CUT))return toast("A screening score of "+CUT+" or more is needed to shortlist");
+   c.stage=ST[i+1];if(c.stage=="Hired"){S.hires.push({id:"h"+(S.n++),name:c.name,role:c.role,day:0,chk:[1,0,0,0],mods:0});toast("Hired: onboarding checklist created")}}
+  else c.stage=ST[i-1];save();render();return}
+ if(a=="rej"){S.rejecting=id;render();return}
+ if(a=="rejok"){c.rej=$("#rj").value;c.stage="Rejected";S.rejecting=null;save();render();toast("Rejected with reason recorded");return}
+ if(a=="restore"){c.stage="Applied";c.rej="";save();render();return}
+ if(a=="savesc"){const r=[...document.querySelectorAll(".rt")].map(e=>+e.value),cid=$("#sc").value;if(!cid)return;
+  S.sc.push({id:"s"+(S.n++),cid,who:$("#si").value,hrs:Math.max(0,+$("#sh").value||0),r,ev:$("#se").checked?1:0});save();render();toast("Scorecard saved");return}
+ const h=S.hires.find(x=>x.id==id);if(h&&(a=="mp"||a=="mm")){h.mods=Math.min(5,Math.max(0,h.mods+(a=="mp"?1:-1)));save();render()}
+});
+document.addEventListener("change",e=>{
+ if(e.target.classList.contains("rt"))return calc();
+ const t=e.target,k=t.dataset.chg;if(!k)return;
+ if(k=="score"){const c=S.cands.find(x=>x.id==t.dataset.id);c.score=t.value===""?null:Math.min(100,Math.max(0,+t.value));save();render();return}
+ const h=S.hires.find(x=>x.id==t.dataset.id);if(!h)return;
+ if(k=="chk")h.chk[+t.dataset.i]=t.checked?1:0;if(k=="day")h.day=Math.max(0,+t.value||0);save();render();
+});
+render();
+</script>
+</body>
+</html>
