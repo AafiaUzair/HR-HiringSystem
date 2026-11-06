@@ -23,27 +23,6 @@ Move candidates through a hiring pipeline, score interviews, track new-hire onbo
 | Workbook generator | Python 3 with `openpyxl`                                  |
 | Hosting            | Vercel (static site)                                        |
 
-## Run locally
-
-Open `index.html` in a browser, or run a local server:
-
-```bash
-python3 -m http.server 8000
-# then open http://localhost:8000
-```
-
-## Deploy to Vercel
-
-1. Push this folder to a GitHub repository.
-2. In Vercel choose **Add New > Project**, import the repository.
-3. Framework Preset: **Other**. Leave build command and output directory empty. Deploy.
-
-## Rebuild the Excel workbook
-
-```bash
-pip install openpyxl
-cd tools && python3 build_workbook.py
-```
 
 Open the file in Excel or Google Sheets so the formulas calculate.
 
